@@ -1,5 +1,6 @@
 
 const { User } = require('../models');
+// const { validateUser } = require('../valodators/userValidator');
 
 
 //Create All Users
@@ -27,7 +28,7 @@ const getUserById = async (req, res, next) => {
 
 //Create User
 const createUser = async (req, res, next) => {
-    try {
+        try {
         const user = await User.create(req.body);
         res.send(user);
     } catch (error) {
@@ -70,5 +71,6 @@ module.exports = {
     getUserById,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    // validateUser
 };

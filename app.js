@@ -1,13 +1,15 @@
 const express = require('express');
-const { User, Book } = require('./src/models');
 const bookRoutes = require('./src/routes/bookRoutes'); 
 const userRoutes = require('./src/routes/userRoutes'); 
 const authRoutes = require('./src/routes/authRoutes'); 
+const productRoutes = require('./src/routes/productRoutes');
+const app = express(); // սերվեր ենք սարքում
 
-const app = express();
-
-app.use(express.json());
-
+app.use(express.json()); // Թողնում ենք որ json ուղարկեն մեզ
+app.use((err, req, res, next) => {
+    res.status(400).json({ error: err.message });
+  });
+  app.use('/products', productRoutes);  
 
 app.use('/books', bookRoutes);
 
