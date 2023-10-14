@@ -111,3 +111,13 @@ product data in it
 
 Considering that we do not have an administrator,
 first we need to create a new user who will be the administrator
+
+
+
+
+
+
+/////////////////// 
+ 
+node mailer
+verify for user

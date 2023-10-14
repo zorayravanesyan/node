@@ -4,7 +4,7 @@ const { User } = require('../models');
 const Auth = async (req, res, next) => {
   try {
     
-    const token = req.headers.authorization;// headers-ը օգյեկտա որի մեջ authorization key-ավ կիլանա token-ը
+    const token = req.headers.authorization;// headers-ը օգյեկտա որի մեջ authorization key-ավ կգա token-ը
   
     if (!token) {
       return res.status(401).json({ message: 'token is not found' });
@@ -21,11 +21,13 @@ const Auth = async (req, res, next) => {
     }
   
     const user = await User.findByPk(decoded.id,{
-      attributes: ["id", "username"]
+      attributes: {
+        exclude: ["password"]
+      }
     });
   
     if(!user){
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: 'user not found!' });
     }
   
     req.identity = user;

@@ -1,27 +1,18 @@
 
 const { Book, User } = require('../models');
 const { validationResult } = require('express-validator');
-// const { validateBook } = require('../valodators/bookValidator');
 
 
 //  Get All Books
 const getAllBooks = async (req, res, next) => {
     try {
-        if(req.identity.is_admin){
-            const books = await Book.findAll({
-                include: {
-                    model: User,
-                    as: "user",
-                    attributes: ["id", "username"]
-                }
-            });
-            res.send(books)
+        let where = {};
+
+        if(!req.identity.is_admin){
+            where.user_id = req.identity.id;
         }
         const books = await Book.findAll({
-            where:{
-                user_id: req.identity.id
-            },
-
+            where: where,
             include: {
                 model: User,
                 as: "user",
@@ -33,50 +24,6 @@ const getAllBooks = async (req, res, next) => {
         next(error);
     }
 };
-
-
-// const getAllBooks = async (req, res, next) => {
-//     try {
-//         let books;
-
-//         if (req.identity.is_admin) {
-//             books = await bookRepository.getAllBooksForAdmin();
-//         } else {
-//             books = await bookRepository.getAllBooksForUser(req.identity.id);
-//         }
-
-//         res.send(books);
-//     } catch (error) {
-//         next(error);
-//     }
-// };
-
-
-
-// const getAllBooksForUser = async (userId) => {
-//     return await Book.findAll({
-//         where: {
-//             user_id: userId
-//         },
-//         include: {
-//             model: User,
-//             as: "user",
-//             attributes: ["id", "username"]
-//         }
-//     });
-// };
-
-// const getAllBooksForAdmin = async () => {
-//     return await Book.findAll({
-//         include: {
-//             model: User,
-//             as: "user",
-//             attributes: ["id", "username"]
-//         }
-//     });
-// };
-
-
 
 
 // Get Book by  ID
@@ -121,7 +68,7 @@ const updateBook = async (req, res, next) => {
                 user_id: req.identity.id
             }
         });
-        if (!book) throw new Error('Книга не найдена');
+        if (!book) throw new Error('book not found');
         await book.update(req.body);
         res.send(book);
     } catch (error) {
@@ -138,7 +85,7 @@ const deleteBook = async (req, res, next) => {
                 user_id: req.identity.id
             }
         });
-        if (!book) throw new Error('Книга не найдена');
+        if (!book) throw new Error('book not found');
         await book.destroy();
         res.send(book);
     } catch (error) {
@@ -147,12 +94,9 @@ const deleteBook = async (req, res, next) => {
 };
 
 module.exports = {
-    // getAllBooksForUser,
-    // getAllBooksForAdmin,
     getAllBooks,
     getBookById,
     createBook,
     updateBook,
     deleteBook
-    // validateBook
 };

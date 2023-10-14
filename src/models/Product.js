@@ -11,12 +11,14 @@ module.exports = (sequelize, DataTypes) => {
         },
         name: {
             type: DataTypes.STRING,
-            allowNull: true
         },
         price: {
+            type: DataTypes.DECIMAL(10, 2),
+        },
+        user_id: {
             type: DataTypes.INTEGER,
-            allowNull: true
-        }
+            allowNull: false
+        },
     }, {
         tableName: 'products',
         underscored: true,
