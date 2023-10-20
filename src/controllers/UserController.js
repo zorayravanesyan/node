@@ -47,39 +47,39 @@ const UserController = {
     try {
       const searchTerm = req.query.search;
 
-      // const query = `
-      //   SELECT users.*,
-      //          books.id AS book_id,
-      //          books.title AS book_title,
-      //          books.description AS book_description,
-      //          books.price AS book_price,
-      //          products.id AS product_id,
-      //          products.name AS product_name,
-      //          products.price AS product_price
-      //   FROM users
-      //   LEFT JOIN books ON users.id = books.user_id
-      //   LEFT JOIN products ON users.id = products.user_id
-      //   ${searchTerm ? 'WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR username ILIKE $1' : ''}
-      // `;
-
       const query = `
-      SELECT users.*, 
-             books.id,
-             books.title,
-             books.description, 
-             books.price,
-             products.id, 
-             products.name, 
-             products.price
-      FROM users
-      LEFT JOIN books ON users.id = books.user_id
-      LEFT JOIN products ON users.id = products.user_id
-      ${
-        searchTerm
-          ? "WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR username ILIKE $1"
-          : ""
-      }
-    `;
+        SELECT users.*,
+               books.id AS book_id,
+               books.title AS book_title,
+               books.description AS book_description,
+               books.price AS book_price,
+               products.id AS product_id,
+               products.name AS product_name,
+               products.price AS product_price
+        FROM users
+        LEFT JOIN books ON users.id = books.user_id
+        LEFT JOIN products ON users.id = products.user_id
+        ${searchTerm ? 'WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR username ILIKE $1' : ''}
+      `;
+
+    //   const query = `
+    //   SELECT users.*, 
+    //          books.id,
+    //          books.title,
+    //          books.description, 
+    //          books.price,
+    //          products.id, 
+    //          products.name, 
+    //          products.price
+    //   FROM users
+    //   LEFT JOIN books ON users.id = books.user_id
+    //   LEFT JOIN products ON users.id = products.user_id
+    //   ${
+    //     searchTerm
+    //       ? "WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR username ILIKE $1"
+    //       : ""
+    //   }
+    // `;
 
       const values = searchTerm ? [`%${searchTerm}%`] : [];
 
