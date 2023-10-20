@@ -10,7 +10,7 @@ const isAdmin = require('../middleware/Admin');
 
 
 // Get All Users
-router.get('/', Auth, isAdmin, UserController.getAllUsers);
+router.get('/', Auth,  UserController.getAllUsers);
 
 // Get User by  ID
 router.get('/:id', UserController.getUserById);
