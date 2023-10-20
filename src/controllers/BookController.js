@@ -1,9 +1,18 @@
+
 const { Book, User } = require('../models');
+const { validationResult } = require('express-validator');
+
 
 //  Get All Books
 const getAllBooks = async (req, res, next) => {
     try {
+        let where = {};
+
+        if(!req.identity.is_admin){
+            where.user_id = req.identity.id;
+        }
         const books = await Book.findAll({
+            where: where,
             include: {
                 model: User,
                 as: "user",
@@ -32,6 +41,11 @@ const getBookById = async (req, res, next) => {
 // Create Book
 const createBook = async (req, res, next) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+    
         const { title, description, price } = req.body;
 
         if (!title || !description || !price) {
@@ -48,8 +62,13 @@ const createBook = async (req, res, next) => {
 // Update Book
 const updateBook = async (req, res, next) => {
     try {
-        const book = await Book.findByPk(req.params.id);
-        if (!book) throw new Error('Книга не найдена');
+        const book = await Book.findOne({
+            where:{
+                id: req.params.id,
+                user_id: req.identity.id
+            }
+        });
+        if (!book) throw new Error('book not found');
         await book.update(req.body);
         res.send(book);
     } catch (error) {
@@ -60,8 +79,13 @@ const updateBook = async (req, res, next) => {
 // Delete Book
 const deleteBook = async (req, res, next) => {
     try {
-        const book = await Book.findByPk(req.params.id);
-        if (!book) throw new Error('Книга не найдена');
+        const book = await Book.findOne({
+            where:{
+                id: req.params.id,
+                user_id: req.identity.id
+            }
+        });
+        if (!book) throw new Error('book not found');
         await book.destroy();
         res.send(book);
     } catch (error) {
