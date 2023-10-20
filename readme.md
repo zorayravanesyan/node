@@ -158,27 +158,3 @@ search in youtube
 
 
 config js ⬇️
-
-// module.exports = {
-//   "development": {
-//     "username": process.env.DB_USERNAME,
-//     "password": process.env.DB_PASSWORD, // Ensure this is the plain text password
-//     "database": process.env.DB_DATABASE,
-//     "host": process.env.DB_HOST,
-//     "dialect": 'postgres',
-//     "port": process.env.DB_PORT
-//   }
-// }
-
-
-// module.exports = {
-//   "development": {
-//     "username": 'postgres',
-//     "password": 'root', // Ensure this is the plain text password
-//     "database": 'test4',
-//     "host": '127.0.0.1',
-//     "dialect": 'postgres',
-//     "port": 5432
-//   }
-// }
-

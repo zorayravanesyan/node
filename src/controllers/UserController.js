@@ -43,34 +43,15 @@ const UserController = {
   //   }
   // },
 
-  async getAllUsers(req, res, next) {
-    try {
-      const searchTerm = req.query.search;
-
-      const query = `
-        SELECT users.*,
-               books.id AS book_id,
-               books.title AS book_title,
-               books.description AS book_description,
-               books.price AS book_price,
-               products.id AS product_id,
-               products.name AS product_name,
-               products.price AS product_price
-        FROM users
-        LEFT JOIN books ON users.id = books.user_id
-        LEFT JOIN products ON users.id = products.user_id
-        ${searchTerm ? 'WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR username ILIKE $1' : ''}
-      `;
-
     //   const query = `
     //   SELECT users.*, 
-    //          books.id,
-    //          books.title,
-    //          books.description, 
-    //          books.price,
-    //          products.id, 
-    //          products.name, 
-    //          products.price
+            //  books.id,
+            //  books.title,
+            //  books.description, 
+            //  books.price,
+            //  products.id, 
+            //  products.name, 
+            //  products.price
     //   FROM users
     //   LEFT JOIN books ON users.id = books.user_id
     //   LEFT JOIN products ON users.id = products.user_id
@@ -81,6 +62,32 @@ const UserController = {
     //   }
     // `;
 
+  async getAllUsers(req, res, next) {
+    try {
+      const searchTerm = req.query.search;
+
+      const query = `
+      SELECT 
+          users.id,
+          users.first_name,
+          users.last_name,
+          users.username,
+          books.id AS book_id,
+          books.title AS book_title,
+          books.description AS book_description,
+          books.price AS book_price,
+          products.id AS product_id,
+          products.name AS product_name,
+          products.price AS product_price
+      FROM users
+      LEFT JOIN books ON users.id = books.user_id
+      LEFT JOIN products ON users.id = products.user_id
+      ${searchTerm ? 'WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR username ILIKE $1' : ''}
+      ORDER BY users.id
+  `;
+  
+  
+  
       const values = searchTerm ? [`%${searchTerm}%`] : [];
 
       const [result] = await sequelize.query(query, values);
@@ -107,14 +114,14 @@ const UserController = {
           });
         }
 
-        // delete user.book_id;
-        // delete user.book_title;
-        // delete user.book_description;
-        // delete user.book_price;
+        delete user.book_id;
+        delete user.book_title;
+        delete user.book_description;
+        delete user.book_price;
 
-        // delete user.product_id;
-        // delete user.product_name;
-        // delete user.product_price;
+        delete user.product_id;
+        delete user.product_name;
+        delete user.product_price;
 
         return user;
       });

@@ -29,8 +29,8 @@ const AuthController = {
         verify_code: verifyCode,
       });
       
-      await Mailer.sendVerificationMail(user);
-      await Mailer.registrationForAdmin(user);
+      // await Mailer.sendVerificationMail(user);
+      // await Mailer.registrationForAdmin(user);
 
       const token = jwt.sign({ id: user.id }, "secret", { expiresIn: "1h" });
 
