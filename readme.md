@@ -121,3 +121,64 @@ first we need to create a new user who will be the administrator
  
 node mailer
 verify for user
+
+
+
+
+
+
+user create location 
+pahuma koordinat datatype float
+registraciayi vaxt petqa ed tvery pahi db-um
+loginic heto  petqa nayi(arandzin request) iranic 100km heravorutyan vra usernerin
+После того как сделал логин должен увидеть (отдельный request)  всех user-ов которые в расстоянии меньше чем 100 км
+
+
+
+skzbi hamar sarqel search
+
+
+
+
+  "lat": 40.3343, // decimal
+    "long": 32.444,
+    "address": "yerevan"
+
+
+
+
+
+
+
+env
+search in youtube
+
+
+
+
+
+config js ⬇️
+
+// module.exports = {
+//   "development": {
+//     "username": process.env.DB_USERNAME,
+//     "password": process.env.DB_PASSWORD, // Ensure this is the plain text password
+//     "database": process.env.DB_DATABASE,
+//     "host": process.env.DB_HOST,
+//     "dialect": 'postgres',
+//     "port": process.env.DB_PORT
+//   }
+// }
+
+
+// module.exports = {
+//   "development": {
+//     "username": 'postgres',
+//     "password": 'root', // Ensure this is the plain text password
+//     "database": 'test4',
+//     "host": '127.0.0.1',
+//     "dialect": 'postgres',
+//     "port": 5432
+//   }
+// }
+

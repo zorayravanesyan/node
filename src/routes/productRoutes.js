@@ -12,7 +12,7 @@ router.get("/:id",  verified, ProductController.getProductById);
 
 
 // Create Product (requires authentication)
-router.post("/", Auth, isAdmin, verified, ProductController.createProduct);
+router.post("/", Auth,  verified, ProductController.createProduct);
 
 
 // Update Product (requires authentication)

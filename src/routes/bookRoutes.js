@@ -11,7 +11,7 @@ const verified = require('../middleware/verified')
 router.get('/', Auth, isAdmin,verified, BookController.getAllBooks);
 
 // Get Book by ID
-router.get('/:id',  verified,BookController.getBookById);
+router.get('/:id',  verified, BookController.getBookById);
 
 // Create Book (requires authentication)
 router.post('/', Auth,  verified,JoiMid.req(bookValidator.bookSchema), BookController.createBook);

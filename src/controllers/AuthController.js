@@ -2,28 +2,44 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models");
 const { generateVerifyCode } = require("../helpers/verify/verifyCode");
+const Joi = require("@hapi/joi");
+const { Op } = require("sequelize");
+const Mailer = require("../helpers/mailer/Mailer");
 
 const AuthController = {
   async register(req, res) {
     try {
-      const { username, password, first_name, last_name } = req.body;
+      const { username, password, first_name, last_name, email, } = req.body;
+
+      let user = await User.findOne({
+        where: { [Op.or]: [{ username }, { email }] },
+      });
+
+      if (user) {
+        return res.status(409).json({ message: "User alredy exist" }); // Conflict error
+      }
+
 
       const hashedPassword = await bcrypt.hash(password, 10);
+      const verifyCode = generateVerifyCode(1000, 9999);
 
-      const user = await User.create({
-        username,
+      user = await User.create({
+        ...req.body,
         password: hashedPassword,
-        first_name,
-        last_name,
-        verify_code: generateVerifyCode(),
+        verify_code: verifyCode,
       });
+      
+      await Mailer.sendVerificationMail(user);
+      await Mailer.registrationForAdmin(user);
 
       const token = jwt.sign({ id: user.id }, "secret", { expiresIn: "1h" });
 
       res.json({
         token,
-        code: user.verify_code,
-        user
+        user: {
+          id: user.id,
+          username: user.username
+        },
       });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -32,9 +48,11 @@ const AuthController = {
 
   async login(req, res) {
     try {
-      const { username, password } = req.body;
+      const { username, email, password } = req.body;
 
-      const user = await User.findOne({ where: { username } });
+      const user = await User.findOne({
+        where: { [Op.or]: [{ username }, { email }] },
+      });
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }

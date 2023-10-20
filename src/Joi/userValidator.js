@@ -4,13 +4,15 @@ const userCreateSchema = Joi.object({
     last_name: Joi.string().required(),
     first_name: Joi.string().required(),
     username: Joi.string().required(),
-    password: Joi.string().min(6).required(),
+    password: Joi.string().min(6).max(12).required(), 
+    email: Joi.string().email().required(),
     is_admin: Joi.boolean().optional()
 });
 const userUpdateSchema = Joi.object({
     last_name: Joi.string().required(),
     first_name: Joi.string().required(),
     username: Joi.string().required(),
+    email: Joi.string().email().required(),
 });
 
 const verify_code = Joi.object({
