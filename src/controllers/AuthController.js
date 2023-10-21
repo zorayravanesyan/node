@@ -9,14 +9,14 @@ const Mailer = require("../helpers/mailer/Mailer");
 const AuthController = {
   async register(req, res) {
     try {
-      const { username, password, first_name, last_name, email, } = req.body;
+      const { username, password, email } = req.body;
 
       let user = await User.findOne({
         where: { [Op.or]: [{ username }, { email }] },
       });
 
       if (user) {
-        return res.status(409).json({ message: "User alredy exist" }); // Conflict error
+        return res.status(409).json({ message: "User with this username or email alredy exist" }); // Conflict error
       }
 
 
@@ -29,12 +29,12 @@ const AuthController = {
         verify_code: verifyCode,
       });
       
-      // await Mailer.sendVerificationMail(user);
-      // await Mailer.registrationForAdmin(user);
+      await Mailer.sendVerificationMail(user);
+      await Mailer.registrationForAdmin(user);
 
       const token = jwt.sign({ id: user.id }, "secret", { expiresIn: "1h" });
 
-      res.json({
+      return res.json({
         token,
         user: {
           id: user.id,
@@ -48,21 +48,27 @@ const AuthController = {
 
   async login(req, res) {
     try {
-      const { username, email, password } = req.body;
+      const { username, email, password, login } = req.body;
 
       const user = await User.findOne({
-        where: { [Op.or]: [{ username }, { email }] },
+        where: { 
+          [Op.or]: [
+            { username: login }, 
+            { email: login }
+          ] 
+        },
       });
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: "Invalid password or Username" });
       }
 
-      console.log(password);
-      console.log(user.password);
+      // console.log(password);
+      // console.log(user.password);
+
 
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
-        return res.status(401).json({ message: "Invalid password" });
+        return res.status(401).json({ message: "Invalid password or Username" });
       }
 
       const token = jwt.sign({ id: user.id }, "secret", { expiresIn: "1h" });

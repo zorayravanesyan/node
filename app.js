@@ -15,7 +15,7 @@ app.use((err, req, res, next) => {
   res.status(400).json({ error: err.message });
 });
 console.log(process.env.DB_USERNAME);
-app.use("/products", productRoutes);
+app.use("/product", productRoutes);
 app.use("/books", bookRoutes);
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);

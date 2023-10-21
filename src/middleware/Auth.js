@@ -4,14 +4,14 @@ const { User } = require('../models');
 const Auth = async (req, res, next) => {
   try {
     
-    const token = req.headers.authorization;// headers-ը օգյեկտա որի մեջ authorization key-ավ կգա token-ը
+    const token = req.headers.authorization_token;// headers-ը օգյեկտա որի մեջ authorization key-ավ կգա token-ը
   
     if (!token) {
-      return res.status(401).json({ message: 'token is not found' });
+      return res.status(401).json({ message: 'Unauthorized' });
     }
-  
+    console.log(token, "tokentokentokentokentokentoken");
     const decoded = await jwt.verify(token, 'secret'); 
-  
+    console.log('===============================================');
     if(!decoded){
       return res.status(401).json({ message: 'Unauthorized' });
     }
@@ -27,7 +27,7 @@ const Auth = async (req, res, next) => {
     });
   
     if(!user){
-      return res.status(401).json({ message: 'user not found!' });
+      return res.status(401).json({ message: 'Unauthorized' });
     }
   
     req.identity = user;

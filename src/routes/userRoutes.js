@@ -13,7 +13,7 @@ const isAdmin = require('../middleware/Admin');
 router.get('/', Auth, isAdmin, UserController.getAllUsers);
 
 // Get User by  ID
-router.get('/:id', UserController.getUserById);
+router.get('/:id', Auth, UserController.getUserById);
 
 // Create User
 router.post('/', Auth, isAdmin, JoiMid.req(userValidator.userCreateSchema), UserController.createUser);

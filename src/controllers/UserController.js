@@ -162,7 +162,7 @@ const UserController = {
 
   async createUser(req, res, next) {
     try {
-      const { username, email } = req.body;
+      const { username, email, password } = req.body;
 
       let user = await User.findOne({
         where: { [Op.or]: [{ username }, { email }] },

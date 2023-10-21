@@ -4,30 +4,14 @@ const ProductController = {
   //  Get All Products
   async getAllProducts(req, res, next) {
     try {
-      let products;
-      if (req.identity.is_admin) {
-        products = await Product.findAll({
-          include: {
-            model: User,
-            as: "user",
-            attributes: ["username"],
-          },
-        });
-      }
-      // else {
-      //   products = await Product.findAll({
-      //     where: {
-      //       user_id: req.identity.id,
-      //     },
-      //     include: {
-      //       model: User,
-      //       as: "user",
-      //       attributes: ["id", "username"],
-      //     },
-      //   });
-      // }
-
-      res.send({ products });
+      let products = await Product.findAll({
+        include: {
+          model: User,
+          as: "user",
+          attributes: ["username"],
+        },
+      });
+      res.send(products);
     } catch (error) {
       next(error);
     }
@@ -38,7 +22,7 @@ const ProductController = {
     try {
       const product = await Product.findByPk(req.params.id);
 
-      if (!product) res.status(400).json("product not found");
+      if (!product) throw new Error("Product not found");
       res.send(product);
     } catch (error) {
       next(error);
@@ -47,15 +31,13 @@ const ProductController = {
 
   // Create Product
   async createProduct(req, res, next) {
-    const { name, price } = req.body;
     try {
       const product = await Product.create({
-        name,
-        price,
+        ...req.body,
         user_id: req.identity.id,
       });
 
-      res.status(201).json({ product });
+      res.status(201).json(product);
     } catch (error) {
       next(error);
     }

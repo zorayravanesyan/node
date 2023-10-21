@@ -14,7 +14,7 @@ const Mailer = {
 
     const mailOptions = {
       from: "ttesttest942@gmail.com",
-      to: "ivudcwbywrjvezmc",
+      to: user.email,
       subject: "Account verification",
       html: html,
     };

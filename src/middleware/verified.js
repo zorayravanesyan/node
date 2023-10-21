@@ -1,5 +1,4 @@
 const isVerified = (req, res, next) => {
-    console.log(req.identity);
     if (req.identity.is_verified) {
         next();
     } else {

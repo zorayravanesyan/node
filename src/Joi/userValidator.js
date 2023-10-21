@@ -9,10 +9,10 @@ const userCreateSchema = Joi.object({
     is_admin: Joi.boolean().optional()
 });
 const userUpdateSchema = Joi.object({
-    last_name: Joi.string().required(),
-    first_name: Joi.string().required(),
-    username: Joi.string().required(),
-    email: Joi.string().email().required(),
+    last_name: Joi.string().optional(),
+    first_name: Joi.string().optional(),
+    username: Joi.string().optional(),
+    email: Joi.string().email().optional(),
 });
 
 const verify_code = Joi.object({
